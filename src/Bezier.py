@@ -1,7 +1,4 @@
-import matplotlib.pyplot as plt
-import time
-
-
+import numpy as np
 
 def Bezier(control_points,iter,curve_points, mid_points):
     if (iter==0):
@@ -21,21 +18,15 @@ def Bezier(control_points,iter,curve_points, mid_points):
         Bezier([control_points[0],r0,r2], iter-1,curve_points, mid_points)
         Bezier([r2,r1,control_points[-1]], iter-1,curve_points, mid_points)
 
+def BF(control_points,iter,curve_points, mid_points):
+    control_points = np.array(control_points)
+    total = 2**iter + 1
+    t = np.linspace(0,1,total)
+    for i in range(total):
+        p = (1 - t[i])**2 * control_points[0] + 2 * \
+            (1 - t[i]) * t[i] * control_points[1] + t[i]**2 * control_points[2]
+        curve_points.append(p)
 
-
-
-
-def Bezier2(control_points,iter,curve_points, mid_points):
-    if(iter==0):
-        print(control_points)
-        curve_points=control_points
-        print("okasoka")
-        print(curve_points)
-    else:
-        for i in range(len(control_points)-1):
-            r = (0.5*(control_points[i][0]+control_points[i+1][0]), 0.5*(control_points[i][1]+control_points[i+1][1]))
-            mid_points.append(r)
-        Bezier2(mid_points, iter-1, curve_points, [])
 
 def BezierN(control_points, iter,mid_points, curve_points):
     if(iter>0):
@@ -95,52 +86,11 @@ def show(control_points,iter, ax, curve_points):
     ax.clear()
     x_control, y_control = zip(*control_points)
     x_curve, y_curve = zip(*curve_points)
-    # x_mid, y_mid = zip(*mid_points)
-    # ax.f(figsize=(6, 4))
     ax.plot(x_curve, y_curve, label="Bezier Curve", color="blue")
     ax.scatter(x_curve, y_curve, color="blue")
     ax.plot(x_control, y_control, label="control Points", color="red")
     ax.scatter(x_control, y_control, color="red", label="Control Points")
-    # ax.scatter(x_mid, y_mid, color="green", label="mid points")
-    # ax.set_title(f'iterasi - {iter}')
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.grid(True)
-    # ax.legend()
-# control_points = [(0,0), (4,4), (8,0), (12,4)]
-# curve_points = []
-# mid_points = []
-# start_time = time.time()
-# BezierN(control_points,10, mid_points, curve_points)
-# # curve_points.append(control_points[-1])
-# # Bezier(control_points, 10, curve_points, mid_points)
-# # Bezier2(control_points, 2, curve_points, mid_points)
-# # mid_points = sorted(mid_points, key=lambda x: x[0])
-# end_time = time.time()
-# duration = end_time-start_time
-
-
-# print(f"control points: {control_points}")
-# print(f'curve : {curve_points}')
-# print(mid_points)
-# print(duration)
-
-# # Add labels and title
-# x_control, y_control = zip(*control_points)
-# x_curve, y_curve = zip(*curve_points)
-# x_mid, y_mid = zip(*mid_points)
-
-# plt.figure(figsize=(6, 4))
-# plt.plot(x_curve, y_curve, label="Bezier Curve", color="blue")
-# plt.plot(x_control, y_control, label="control Points", color="red")
-# plt.scatter(x_control, y_control, color="red", label="Control Points")
-# # plt.scatter(x_mid, y_mid, color="green", label="mid points")
-# plt.xlabel("X")
-# plt.ylabel("Y")
-# plt.legend()
-# plt.grid(True)
-# plt.show()
-
-# Show the plot
-
-
+    ax.legend()
